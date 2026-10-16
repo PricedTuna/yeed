@@ -1,10 +1,10 @@
 # @yeed/web
 
-Yeed's frontend: React 19, TypeScript 6 and Vite 8. Tooling decisions are explained in [ADR-0005](../../docs/decisions/0005-frontend-toolchain.md).
+Yeed's frontend: React 19, TypeScript 6 and Vite 8, linted with ESLint (type-aware rules), formatted with Prettier and tested with Vitest and Testing Library.
 
 ## Setup
 
-From the repository root, after following [docs/development.md](../../docs/development.md):
+From the repository root, after installing the tools listed in the [root README](../../README.md#requirements):
 
 ```powershell
 Copy-Item apps/web/.env.example apps/web/.env.local   # Git Bash: cp apps/web/.env.example apps/web/.env.local

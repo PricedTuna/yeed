@@ -68,7 +68,7 @@ Yeed is a web application deployed on cloud infrastructure, with separate compon
 | Infrastructure   | AWS SAM on CloudFormation                                     |
 | Frontend hosting | Amazon S3 and CloudFront                                      |
 
-See [docs/architecture.md](docs/architecture.md) for details.
+Each part documents its setup and conventions in its own README: [apps/web](apps/web/README.md) and [services/api](services/api/README.md).
 
 ## Security
 
@@ -91,37 +91,54 @@ Yeed's main goal is to **reduce the time and effort students spend finding and e
 
 ## Project status
 
-In development. The repository currently contains the base structure, the documentation, the proposed data model and the frontend base: its tooling, an HTTP client and a page that checks the connection to the API. The backend, the database and the deployment do not exist yet.
+In development. The repository contains the frontend base (tooling, HTTP client and a page that checks the connection to the API) and the backend base (`GET /health` on AWS Lambda, runnable locally with AWS SAM). The database, the business features and the cloud deployment do not exist yet.
 
 ## Repository layout
 
 ```text
-apps/web/      React + TypeScript + Vite frontend
-docs/          Architecture, data model, development guide and decisions
+apps/web/          React + TypeScript + Vite frontend
+services/api/      Python 3.13 API for AWS Lambda
+infrastructure/    AWS SAM template (API Gateway, Lambda, logs)
 ```
 
-`services/api/` (backend), `infrastructure/` (AWS SAM), `data/catalog/` (catalog files) and `scripts/` will be added when they have content.
+## Requirements
+
+| Tool           | Version | Used for                               |
+| -------------- | ------- | -------------------------------------- |
+| Git            | 2.40+   | Version control                        |
+| Node.js        | 24 LTS  | Frontend                               |
+| pnpm           | 12      | Frontend dependencies and root scripts |
+| Python         | 3.13    | Backend                                |
+| uv             | 0.13+   | Backend dependencies and tools         |
+| Docker Desktop | Recent  | Running Lambda functions locally       |
+| AWS SAM CLI    | 1.169+  | Building and running the API locally   |
+
+On Windows:
+
+```powershell
+winget install --id OpenJS.NodeJS.LTS -e
+npm install -g pnpm@latest
+winget install --id Python.Python.3.13 -e
+winget install --id astral-sh.uv -e
+winget install --id Docker.DockerDesktop -e
+winget install --id Amazon.SAM-CLI -e
+```
 
 ## Getting started
-
-Requirements: Git, Node.js 24 LTS and pnpm 12. The full tool list is in [docs/development.md](docs/development.md).
 
 ```powershell
 git clone https://github.com/PricedTuna/yeed.git
 cd yeed
 Copy-Item apps/web/.env.example apps/web/.env.local
 pnpm install
-pnpm dev:web
+uv sync --directory services/api
 ```
 
-The frontend is served at <http://localhost:5173>. Until the API exists (Stage 3), the page reports that it cannot connect to the server.
+Then, in two terminals:
 
-Before opening a pull request, run `pnpm check`: it verifies formatting, lint, types and tests.
+```powershell
+pnpm dev:api    # API at http://localhost:3000 (needs Docker Desktop running)
+pnpm dev:web    # frontend at http://localhost:5173
+```
 
-## Documentation
-
-- [Architecture](docs/architecture.md)
-- [Data model and catalog format](docs/database.md)
-- [Development guide and conventions](docs/development.md)
-- [Changes from the project proposal](docs/proposal-changes.md)
-- [Architecture decisions](docs/decisions/README.md)
+Before opening a pull request, run `pnpm check`: it verifies formatting, lint, types and tests of both the frontend and the API.

@@ -1,8 +1,7 @@
 import json
 
-from yeed_api.handlers import health
-
 from tests.support import http_event, lambda_context
+from yeed_api.handlers import health
 
 
 def test_health_reports_that_the_api_is_up() -> None:

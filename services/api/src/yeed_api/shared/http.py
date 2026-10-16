@@ -32,27 +32,31 @@ def error_response(status: HTTPStatus, code: str, message: str) -> Response[Erro
 
 
 def create_app() -> APIGatewayHttpResolver:
-    """Creates a router for API Gateway HTTP API events with the shared error handling."""
+    """Creates a router for API Gateway HTTP API events with shared error handling."""
     app = APIGatewayHttpResolver()
-
-    @app.not_found
-    def handle_not_found(_error: NotFoundError) -> Response[ErrorBody]:
-        return error_response(
-            HTTPStatus.NOT_FOUND, "not_found", "The requested route does not exist."
-        )
-
-    @app.exception_handler(ApiError)
-    def handle_api_error(error: ApiError) -> Response[ErrorBody]:
-        return error_response(error.status, error.code, error.message)
-
-    @app.exception_handler(Exception)
-    def handle_unexpected_error(_error: Exception) -> Response[ErrorBody]:
-        # The traceback goes to the logs; the user only gets a generic message.
-        logger.exception("Unhandled error")
-        return error_response(
-            HTTPStatus.INTERNAL_SERVER_ERROR,
-            "internal_error",
-            "Something went wrong on our side. Please try again later.",
-        )
-
+    app.not_found(_handle_not_found)
+    # Plain calls instead of decorators: Powertools does not annotate
+    # `exception_handler`, so as a decorator it would erase these functions' types.
+    app.exception_handler(ApiError)(_handle_api_error)
+    app.exception_handler(Exception)(_handle_unexpected_error)
     return app
+
+
+def _handle_not_found(_error: NotFoundError) -> Response[ErrorBody]:
+    return error_response(
+        HTTPStatus.NOT_FOUND, "not_found", "The requested route does not exist."
+    )
+
+
+def _handle_api_error(error: ApiError) -> Response[ErrorBody]:
+    return error_response(error.status, error.code, error.message)
+
+
+def _handle_unexpected_error(error: Exception) -> Response[ErrorBody]:
+    # The traceback goes to the logs; the user only gets a generic message.
+    logger.error("Unhandled error", exc_info=error)
+    return error_response(
+        HTTPStatus.INTERNAL_SERVER_ERROR,
+        "internal_error",
+        "Something went wrong on our side. Please try again later.",
+    )

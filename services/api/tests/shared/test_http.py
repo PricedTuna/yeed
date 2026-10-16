@@ -2,10 +2,10 @@ import json
 from http import HTTPStatus
 
 import pytest
-from yeed_api.shared.errors import ApiError
-from yeed_api.shared.http import create_app
 
 from tests.support import http_event, lambda_context
+from yeed_api.shared.errors import ApiError
+from yeed_api.shared.http import create_app
 
 
 def test_api_error_becomes_the_standard_error_response() -> None:
@@ -13,7 +13,9 @@ def test_api_error_becomes_the_standard_error_response() -> None:
 
     @app.get("/conflict")
     def conflict() -> None:
-        raise ApiError(HTTPStatus.CONFLICT, "already_exists", "That item already exists.")
+        raise ApiError(
+            HTTPStatus.CONFLICT, "already_exists", "That item already exists."
+        )
 
     response = app.resolve(http_event("GET", "/conflict"), lambda_context())
 
@@ -23,7 +25,9 @@ def test_api_error_becomes_the_standard_error_response() -> None:
     }
 
 
-def test_unexpected_error_hides_internal_details(capsys: pytest.CaptureFixture[str]) -> None:
+def test_unexpected_error_hides_internal_details(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
     app = create_app()
 
     @app.get("/boom")
@@ -41,4 +45,4 @@ def test_unexpected_error_hides_internal_details(capsys: pytest.CaptureFixture[s
     }
     assert "db-internal" not in response["body"]
     # The details are not lost: they go to the logs for the team.
-    assert "db-internal" in capsys.readouterr().out
+    assert "db-internal" in caplog.text

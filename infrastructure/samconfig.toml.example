@@ -1,0 +1,25 @@
+# AWS SAM CLI configuration. Copy this file to samconfig.toml (not committed)
+# and adjust it. Run every `sam` command from this folder.
+version = 0.1
+
+[default.global.parameters]
+stack_name = "yeed-dev"
+
+[default.validate.parameters]
+lint = true
+
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.local_start_api.parameters]
+port = 3000
+warm_containers = "EAGER"
+
+# Deployment is not approved yet: review the resources and their costs first.
+[default.deploy.parameters]
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+resolve_s3 = true
+parameter_overrides = "Stage=dev AllowedOrigins=http://localhost:5173"

@@ -13,12 +13,14 @@ class _FakeLambdaContext:
     function_name: str = "yeed-test"
     function_version: str = "$LATEST"
     memory_limit_in_mb: int = 256
-    invoked_function_arn: str = "arn:aws:lambda:us-east-1:123456789012:function:yeed-test"
+    invoked_function_arn: str = (
+        "arn:aws:lambda:us-east-1:123456789012:function:yeed-test"
+    )
     aws_request_id: str = "test-request-id"
 
 
 def lambda_context() -> LambdaContext:
-    """Returns the attributes of a Lambda context that the handlers and Powertools read."""
+    """Returns the Lambda context attributes that handlers and Powertools read."""
     return cast(LambdaContext, _FakeLambdaContext())
 
 

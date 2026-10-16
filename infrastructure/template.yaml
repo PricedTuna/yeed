@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Yeed API - API Gateway HTTP API and Python Lambda functions.
+
+Parameters:
+  Stage:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, prod]
+    Description: Environment name, used in resource names and cost allocation tags.
+  AllowedOrigins:
+    Type: CommaDelimitedList
+    Default: http://localhost:5173
+    Description: Browser origins allowed to call the API (CORS). Never use "*".
+
+Globals:
+  Function:
+    Runtime: python3.13
+    Architectures: [x86_64]
+    CodeUri: ../services/api/src
+    MemorySize: 256
+    Timeout: 10
+    LoggingConfig:
+      LogFormat: JSON
+      LogGroup: !Ref ApiLogGroup
+    Environment:
+      Variables:
+        POWERTOOLS_SERVICE_NAME: yeed-api
+        POWERTOOLS_LOG_LEVEL: INFO
+    Tags:
+      project: yeed
+      stage: !Ref Stage
+
+Resources:
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins: !Ref AllowedOrigins
+        AllowMethods: [GET]
+        AllowHeaders: [Content-Type]
+        MaxAge: 600
+      # Caps traffic for the whole API, which also caps costs if someone abuses it.
+      DefaultRouteSettings:
+        ThrottlingRateLimit: 20
+        ThrottlingBurstLimit: 50
+      Tags:
+        project: yeed
+        stage: !Ref Stage
+
+  # One log group for every API function. Without a retention period, CloudWatch
+  # keeps (and bills for) logs forever.
+  ApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub /yeed/${Stage}/api
+      RetentionInDays: 14
+      Tags:
+        - Key: project
+          Value: yeed
+        - Key: stage
+          Value: !Ref Stage
+
+  HealthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: GET /health - reports that the API is reachable.
+      Handler: yeed_api.handlers.health.handler
+      Events:
+        GetHealth:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Method: GET
+            Path: /health
+
+Outputs:
+  ApiUrl:
+    Description: Base URL of the API. Use it as VITE_API_BASE_URL in the frontend.
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
