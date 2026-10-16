@@ -1,0 +1,10 @@
+packages:
+  - apps/*
+
+# Fail the install when the Node.js version does not satisfy "engines".
+engineStrict: true
+
+# pnpm 11 security defaults are kept on purpose (see docs/decisions/0003):
+# - minimumReleaseAge: 1440 -> versions published less than a day ago are not installed.
+# - blockExoticSubdeps: true -> dependencies cannot pull packages from git or tarball URLs.
+# - Dependency build scripts are blocked unless they are listed under "allowBuilds".

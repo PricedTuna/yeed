@@ -1,0 +1,58 @@
+.card {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.heading {
+  font-size: 1rem;
+}
+
+.status {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+/* The dot repeats the state with color; the text alone already explains it. */
+.status::before {
+  content: "";
+  flex: none;
+  width: 0.625rem;
+  height: 0.625rem;
+  /* Centers the dot on the first line of text (line-height: 1.5). */
+  margin-top: calc((1.5em - 0.625rem) / 2);
+  border-radius: 50%;
+  background: var(--color-text-muted);
+}
+
+.status[data-status="success"] {
+  color: var(--color-text);
+}
+
+.status[data-status="success"]::before {
+  background: var(--color-success);
+}
+
+.status[data-status="error"]::before {
+  background: var(--color-danger);
+}
+
+.button {
+  justify-self: start;
+  min-height: 2.75rem; /* 44 px: comfortable touch target on phones. */
+  padding-inline: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: var(--color-accent);
+}

@@ -1,0 +1,19 @@
+# Store and check out text files with LF line endings on every operating
+# system, regardless of each developer's core.autocrlf setting.
+* text=auto eol=lf
+
+# Windows only runs these scripts correctly with CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files: never convert line endings or show text diffs.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+*.zip binary

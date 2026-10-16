@@ -1,84 +1,127 @@
 # Yeed
 
-**Yeed** es una plataforma web de búsqueda y recomendación de contenido educativo, diseñada para estudiantes de Ingeniería de Software que complementan su formación mediante aprendizaje autodidacta.
+**Yeed** is a web platform for searching and recommending educational content, built for Software Engineering students who complement their coursework through self-directed learning.
 
-La plataforma centraliza recursos educativos disponibles en Internet, permitiendo buscar y filtrar contenido según diferentes criterios y conservar la valoración que los estudiantes realizan sobre los recursos consultados. A partir de los intereses y valoraciones de cada usuario, Yeed genera recomendaciones personalizadas que se adaptan conforme se utiliza el sistema.
+The platform brings together educational resources available on the Internet, lets students search and filter them, and keeps the ratings students give to the resources they consult. Based on each user's interests and ratings, Yeed generates personalized recommendations that improve as the system is used.
 
-## Características
+## Features
 
-* Registro e inicio de sesión de usuarios.
-* Selección y modificación de temas de interés.
-* Catálogo de recursos educativos.
-* Búsqueda por título, descripción y etiquetas.
-* Filtrado por tipo de contenido.
-* Valoración de recursos en una escala de 1 a 5.
-* Recomendaciones personalizadas basadas en los intereses y valoraciones del usuario.
-* Consulta de información y enlace de acceso a cada recurso.
-* Diseño adaptable para computadoras y dispositivos móviles.
-* Despliegue en infraestructura de nube mediante HTTPS.
+- Account registration, sign-in and sign-out.
+- Selecting and changing topics of interest.
+- Catalog of educational resources.
+- Search by title, description and tags.
+- Filtering by content type.
+- Rating resources on a scale from 1 to 5.
+- Personalized recommendations based on the user's interests and ratings.
+- Information and access link for each resource.
+- Responsive design for desktop and mobile browsers.
+- Cloud deployment over HTTPS.
 
-## Tipos de contenido
+## Content types
 
-El catálogo puede incluir diferentes tipos de recursos educativos:
+The catalog can include several types of educational resources:
 
-* Documentos
-* Videos
-* Audio
-* Imágenes
-* Markdown
+- Documents
+- Videos
+- Audio
+- Images
+- Markdown
 
-Yeed almacena la información y referencia de cada recurso, pero no aloja ni reproduce directamente el contenido externo.
+Yeed stores the information and a link for each resource; it does not host or play external content.
 
-## Sistema de recomendación
+## Recommendation system
 
-El sistema utiliza la información proporcionada por los usuarios para generar recomendaciones relevantes. Las recomendaciones consideran principalmente:
+Yeed uses the information users provide to generate relevant recommendations. Recommendations mainly consider:
 
-* Temas de interés seleccionados por el usuario.
-* Valoraciones realizadas sobre recursos consultados.
-* Similitud entre los intereses y valoraciones de los usuarios.
+- The topics of interest the user selected.
+- The ratings the user gave to resources.
+- The similarity between users' interests and ratings.
 
-De esta manera, dos usuarios con intereses o valoraciones diferentes pueden recibir recomendaciones distintas.
+As a result, two users with different interests or ratings can receive different recommendations.
 
-## Usuarios
+## Users
 
-Yeed contempla dos tipos principales de acceso:
+Yeed has two kinds of access:
 
-### Visitante
+### Visitor
 
-Puede buscar recursos, aplicar filtros y consultar la información disponible sin necesidad de crear una cuenta.
+Can search resources, apply filters and view resource information without creating an account.
 
-### Estudiante registrado
+### Registered student
 
-Además de las funciones disponibles para visitantes, puede:
+In addition to everything a visitor can do, a registered student can:
 
-* Crear y administrar su cuenta.
-* Seleccionar sus temas de interés.
-* Valorar recursos.
-* Consultar recomendaciones personalizadas.
+- Create and manage an account.
+- Select topics of interest.
+- Rate resources.
+- View personalized recommendations.
 
-## Arquitectura
+## Architecture
 
-La plataforma está diseñada como una aplicación web desplegada en infraestructura de nube, utilizando componentes separados para la interfaz, la lógica de aplicación y el almacenamiento de información.
+Yeed is a web application deployed on cloud infrastructure, with separate components for the interface, the application logic and data storage. It includes authentication, access control and isolation of the components that store internal data.
 
-La arquitectura contempla mecanismos de autenticación, control de acceso y aislamiento de los componentes que almacenan información interna.
+| Layer            | Technology                                                    |
+| ---------------- | ------------------------------------------------------------- |
+| Frontend         | React, TypeScript, Vite                                       |
+| API              | Amazon API Gateway (HTTP API) and AWS Lambda with Python 3.13 |
+| Data             | PostgreSQL (proposed deployment: Amazon RDS)                  |
+| Infrastructure   | AWS SAM on CloudFormation                                     |
+| Frontend hosting | Amazon S3 and CloudFront                                      |
 
-## Seguridad
+See [docs/architecture.md](docs/architecture.md) for details.
 
-El proyecto contempla buenas prácticas básicas de seguridad, entre ellas:
+## Security
 
-* Almacenamiento seguro de contraseñas mediante algoritmos adaptativos como bcrypt o Argon2.
-* Uso de HTTPS.
-* Principio de mínimo privilegio para los permisos de los componentes.
-* Protección de la base de datos frente al acceso directo desde Internet.
-* Manejo de credenciales mediante variables de entorno.
-* Exclusión de secretos y credenciales mediante `.gitignore`.
+- Passwords are stored as Argon2id hashes, never in plain text.
+- All traffic uses HTTPS.
+- Each component has only the permissions it needs.
+- The database is not reachable from the Internet.
+- Credentials are provided through environment variables, never committed.
+- Secrets are excluded from the repository through `.gitignore`.
 
-## Alcance
+## Scope
 
-Yeed está orientado a proporcionar un prototipo funcional capaz de centralizar la búsqueda de recursos educativos y ofrecer recomendaciones personalizadas a estudiantes.
+Yeed is a working prototype that brings educational resource search into one place and offers personalized recommendations to students.
 
-La plataforma **no aloja ni reproduce contenido externo**, no realiza indexación automática de Internet, no integra APIs de plataformas externas y no contempla aplicaciones móviles nativas. El acceso desde dispositivos móviles se realiza mediante el navegador.
+The platform **does not host or play external content**, does not crawl the Internet, does not integrate external platform APIs and has no native mobile apps. Mobile access is through the browser.
 
-## Objetivo
+## Goal
 
-El objetivo principal de Yeed es **reducir el tiempo y esfuerzo que los estudiantes dedican a localizar y evaluar recursos educativos**, aprovechando la información generada por la comunidad de usuarios para ofrecer recomendaciones cada vez más relevantes.
+Yeed's main goal is to **reduce the time and effort students spend finding and evaluating educational resources**, using the information generated by its community of users to offer increasingly relevant recommendations.
+
+## Project status
+
+In development. The repository currently contains the base structure, the documentation, the proposed data model and the frontend base: its tooling, an HTTP client and a page that checks the connection to the API. The backend, the database and the deployment do not exist yet.
+
+## Repository layout
+
+```text
+apps/web/      React + TypeScript + Vite frontend
+docs/          Architecture, data model, development guide and decisions
+```
+
+`services/api/` (backend), `infrastructure/` (AWS SAM), `data/catalog/` (catalog files) and `scripts/` will be added when they have content.
+
+## Getting started
+
+Requirements: Git, Node.js 24 LTS and pnpm 12. The full tool list is in [docs/development.md](docs/development.md).
+
+```powershell
+git clone https://github.com/PricedTuna/yeed.git
+cd yeed
+Copy-Item apps/web/.env.example apps/web/.env.local
+pnpm install
+pnpm dev:web
+```
+
+The frontend is served at <http://localhost:5173>. Until the API exists (Stage 3), the page reports that it cannot connect to the server.
+
+Before opening a pull request, run `pnpm check`: it verifies formatting, lint, types and tests.
+
+## Documentation
+
+- [Architecture](docs/architecture.md)
+- [Data model and catalog format](docs/database.md)
+- [Development guide and conventions](docs/development.md)
+- [Changes from the project proposal](docs/proposal-changes.md)
+- [Architecture decisions](docs/decisions/README.md)
