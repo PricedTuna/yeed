@@ -1,11 +1,15 @@
+import { AuthDialog, AuthDialogProvider } from "@/features/auth/AuthDialog";
 import { AppLayout } from "@/layouts/AppLayout";
 import { HomePage } from "@/pages/HomePage";
 
-/** Root component. Routing and global providers will be added here when they are needed. */
+/** Root component: global providers, the shared layout and the current page. */
 export function App() {
   return (
-    <AppLayout>
-      <HomePage />
-    </AppLayout>
+    <AuthDialogProvider>
+      <AppLayout>
+        <HomePage />
+      </AppLayout>
+      <AuthDialog />
+    </AuthDialogProvider>
   );
 }

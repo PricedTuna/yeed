@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-mk-theme="yeed" data-mk-mode="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,9 +8,29 @@
       content="Search educational resources, rate them and get recommendations based on your interests."
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..900&display=swap"
+    />
+    <!--
+      motion-kit MK_HEAD_SCRIPT (from "@yewdiel21/motion-kit/auto"), kept in sync
+      by hand: entrance animations start hidden only when JavaScript runs, and
+      everything is shown again if no animation has started after 2.5 s.
+    -->
+    <script>
+      (function () {
+        var r = document.documentElement;
+        r.classList.add("mk-js");
+        setTimeout(function () {
+          if (!r.classList.contains("mk-ready")) r.classList.add("mk-failed");
+        }, 2500);
+      })();
+    </script>
     <title>Yeed</title>
   </head>
-  <body>
+  <body class="mk-app">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

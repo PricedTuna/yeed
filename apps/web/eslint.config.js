@@ -27,6 +27,14 @@ export default defineConfig([
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    rules: {
+      // Safari drops list semantics from lists styled with `list-style: none`,
+      // so an explicit role="list" on those lists is intentional, not redundant.
+      "jsx-a11y-x/no-redundant-roles": [
+        "error",
+        { ul: ["list"], ol: ["list"] },
+      ],
+    },
   },
   {
     // Configuration files written in plain JavaScript run in Node.js.

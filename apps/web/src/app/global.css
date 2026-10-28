@@ -1,44 +1,52 @@
 /*
- * Global styles: design tokens and a minimal reset. Component styles live in
- * CSS Modules next to each component and use these variables.
+ * Yeed's design line, on top of motion-kit:
+ * - motion-kit provides the tokens (--mk-*), the controls (.mk-button,
+ *   .mk-field, .mk-status…) and the "yeed" theme generated from #3D6BFF
+ *   (styles/yeed.css).
+ * - The page is always light, on a pure white background (index.html sets
+ *   data-mk-mode="light"). Color comes from accents, never from backgrounds.
+ * - Components use only these variables, never raw colors.
  */
 
-:root {
-  color-scheme: light dark;
-
-  --color-bg: #ffffff;
-  --color-surface: #f6f8fa;
-  --color-text: #1f2328;
-  --color-text-muted: #59636e;
-  --color-border: #d1d9e0;
-  --color-accent: #0969da;
-  --color-success: #1a7f37;
-  --color-danger: #cf222e;
-
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-
-  --radius: 0.5rem;
-  --content-width: 64rem;
+/* White everywhere: background, surfaces and dialogs. */
+:root[data-mk-theme="yeed"] {
+  --md-sys-color-background: #ffffff;
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0d1117;
-    --color-surface: #151b23;
-    --color-text: #f0f6fc;
-    --color-text-muted: #9198a1;
-    --color-border: #3d444d;
-    --color-accent: #4493f8;
-    --color-success: #3fb950;
-    --color-danger: #f85149;
-  }
+:root {
+  /* Strong tones for icons, shapes and badges; soft tones for colored cards. */
+  --yeed-sky: #1f9bf0;
+  --yeed-sky-soft: #ddf0fe;
+  --yeed-sun: #f5b400;
+  --yeed-sun-soft: #fff3cc;
+  --yeed-mint: #14b47a;
+  --yeed-mint-soft: #d6f6e9;
+  --yeed-coral: #ff6650;
+  --yeed-coral-soft: #ffe3dd;
+  --yeed-grape: #8656f5;
+  --yeed-grape-soft: #ece4ff;
+  /* Text and icons on strong tones. */
+  --yeed-on-tone: #ffffff;
+  --yeed-on-sun: #2b2100;
+  /* Neutral input background on white. */
+  --yeed-field: #f2f4f8;
+  /* Soft shadow for white cards on a white page. */
+  --yeed-shadow: 0 18px 40px -24px rgb(16 24 64 / 0.35);
+
+  --yeed-content-width: 72rem;
+  --yeed-header-height: 64px;
+}
+
+/* motion-kit overrides: white dialog, neutral fields. */
+.mk-dialog {
+  --mk-dialog-bg: var(--mk-bg);
+}
+
+.mk-field {
+  --mk-field-bg: var(--yeed-field);
 }
 
 *,
@@ -50,10 +58,6 @@
 body {
   margin: 0;
   min-height: 100dvh;
-  font-family: var(--font-sans);
-  line-height: 1.5;
-  color: var(--color-text);
-  background: var(--color-bg);
 }
 
 h1,
@@ -67,9 +71,20 @@ button {
   font: inherit;
 }
 
+/* In-page links (#how-it-works) land below the sticky header. */
+[id] {
+  scroll-margin-top: calc(var(--yeed-header-height) + 16px);
+}
+
 :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: 2px solid var(--mk-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

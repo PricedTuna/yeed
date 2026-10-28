@@ -1,0 +1,167 @@
+.hero {
+  display: grid;
+  align-items: center;
+  gap: var(--mk-space-10);
+  padding-block: var(--mk-space-8) var(--mk-space-4);
+}
+
+.copy {
+  display: grid;
+  justify-items: start;
+  gap: var(--mk-space-5);
+}
+
+.eyebrow {
+  padding: var(--mk-space-1) var(--mk-space-3);
+  border-radius: var(--mk-radius-md);
+  background: var(--yeed-sun-soft);
+  color: var(--yeed-on-sun);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.title {
+  color: var(--mk-text);
+  font-size: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.lead {
+  max-width: 34rem;
+  color: var(--mk-muted);
+  font-size: 1.125rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mk-space-3);
+}
+
+.actions > * {
+  font-weight: 700;
+}
+
+/* Illustration: a colored composition on the white page. */
+.illustration {
+  position: relative;
+  min-height: 340px;
+}
+
+.blob {
+  position: absolute;
+  inset: 8% 6% 8% 12%;
+  border-radius: 46% 54% 42% 58% / 52% 40% 60% 48%;
+  background: var(--yeed-sky-soft);
+}
+
+.ring {
+  position: absolute;
+  top: 0;
+  right: 8%;
+  width: 64px;
+  height: 64px;
+  border: 12px solid var(--yeed-grape);
+  border-radius: 50%;
+}
+
+.dot {
+  position: absolute;
+  bottom: 4%;
+  left: 6%;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--yeed-mint);
+  rotate: -14deg;
+}
+
+.cards {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--mk-space-3);
+  min-height: 340px;
+}
+
+.sample {
+  display: flex;
+  align-items: center;
+  gap: var(--mk-space-3);
+  width: min(100%, 300px);
+  padding: var(--mk-space-3) var(--mk-space-4) var(--mk-space-3)
+    var(--mk-space-3);
+  border-radius: var(--mk-radius-lg);
+  background: var(--mk-bg);
+  box-shadow: var(--yeed-shadow);
+}
+
+.sampleSky {
+  --tone: var(--yeed-sky);
+}
+
+.sampleCoral {
+  --tone: var(--yeed-coral);
+}
+
+.sampleSun {
+  --tone: var(--yeed-sun);
+}
+
+.sampleIcon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--mk-radius-sm);
+  background: var(--tone);
+  color: var(--yeed-on-tone);
+}
+
+.sampleText {
+  display: grid;
+  gap: 2px;
+  color: var(--mk-text);
+  font-size: 0.9375rem;
+}
+
+.stars {
+  color: var(--yeed-sun);
+  letter-spacing: 0.08em;
+}
+
+.badge {
+  justify-self: end;
+  margin-right: 4%;
+  padding: var(--mk-space-2) var(--mk-space-4);
+  border-radius: var(--mk-radius-full);
+  background: var(--yeed-grape);
+  color: var(--yeed-on-tone);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+@media (min-width: 60rem) {
+  .hero {
+    grid-template-columns: 1.1fr 1fr;
+    padding-block: var(--mk-space-16) var(--mk-space-10);
+  }
+
+  .illustration,
+  .cards {
+    min-height: 420px;
+  }
+
+  /* Staggered cards only where there is room for them. */
+  .sample:nth-child(1) {
+    translate: -18% 0;
+  }
+
+  .sample:nth-child(3) {
+    translate: 14% 0;
+  }
+}

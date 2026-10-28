@@ -1,0 +1,103 @@
+.section {
+  display: grid;
+  gap: var(--mk-space-6);
+}
+
+.header {
+  display: grid;
+  gap: var(--mk-space-2);
+}
+
+.heading {
+  font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.lead {
+  max-width: 36rem;
+  color: var(--mk-muted);
+  font-size: 1.125rem;
+}
+
+.grid {
+  display: grid;
+  /* Five columns on a desktop, fewer as the screen narrows, one on phones. */
+  grid-template-columns: repeat(auto-fit, minmax(11.5rem, 1fr));
+  gap: var(--mk-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each tone maps the card to one color of the Yeed palette. */
+.card[data-tone="sky"] {
+  --tone: var(--yeed-sky);
+  --tone-soft: var(--yeed-sky-soft);
+  --on-tone: var(--yeed-on-tone);
+}
+
+.card[data-tone="coral"] {
+  --tone: var(--yeed-coral);
+  --tone-soft: var(--yeed-coral-soft);
+  --on-tone: var(--yeed-on-tone);
+}
+
+.card[data-tone="sun"] {
+  --tone: var(--yeed-sun);
+  --tone-soft: var(--yeed-sun-soft);
+  --on-tone: var(--yeed-on-sun);
+}
+
+.card[data-tone="mint"] {
+  --tone: var(--yeed-mint);
+  --tone-soft: var(--yeed-mint-soft);
+  --on-tone: var(--yeed-on-tone);
+}
+
+.card[data-tone="grape"] {
+  --tone: var(--yeed-grape);
+  --tone-soft: var(--yeed-grape-soft);
+  --on-tone: var(--yeed-on-tone);
+}
+
+.card {
+  display: grid;
+  align-content: start;
+  gap: var(--mk-space-2);
+  padding: var(--mk-space-5);
+  border-radius: var(--mk-radius-lg);
+  background: var(--tone-soft);
+  transition:
+    translate var(--mk-dur) var(--mk-ease-flow),
+    box-shadow var(--mk-dur) var(--mk-ease-flow);
+}
+
+@media (hover: hover) {
+  .card:hover {
+    translate: 0 -4px;
+    box-shadow: 0 14px 28px -16px var(--tone);
+  }
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: var(--mk-space-2);
+  border-radius: var(--mk-radius-md);
+  background: var(--tone);
+  color: var(--on-tone);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.description {
+  color: var(--mk-muted);
+}
