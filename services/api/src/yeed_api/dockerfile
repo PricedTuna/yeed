@@ -29,3 +29,7 @@ EXPOSE 3000
 # Iniciamos Express utilizando el código compilado
 # sin tener que compilar en cada ejecución.
 CMD ["node", "dist/server.js"]
+
+# Yeed necesita proteger información como la contraseña de PostgreSQL, las claves de autenticación de usuarios y los permisos de acceso a servicios de AWS como DynamoDB y S3.
+# Estos datos no se guardarán dentro del Dockerfile ni de la imagen. Utilizaremos variables de entorno y AWS Secrets Manager para proporcionar las credenciales al ejecutar el contenedor. Para comunicarnos con servicios de AWS utilizaremos roles IAM, evitando almacenar claves de acceso en el código.
+# También utilizaremos un archivo .dockerignore para impedir que archivos sensibles, como .env, se incluyan accidentalmente en la imagen.
