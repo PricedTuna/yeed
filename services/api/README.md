@@ -52,6 +52,47 @@ The image uses `node:22-alpine` with `dependencies`, `build` and `production` st
 
 pnpm continues to manage local workspace development. After changing API dependencies, also regenerate the Docker lockfile with `npm install --package-lock-only --ignore-scripts --prefix services/api` and commit both lockfiles with the package manifest.
 
+## Publishing to Amazon ECR
+
+The destination is the existing private `yeed-api` repository in `us-west-1`, account `402906460007`: `402906460007.dkr.ecr.us-west-1.amazonaws.com/yeed-api`. Use an AWS CLI profile for that account with permission to authenticate, push and verify images. If AWS returns `AccessDeniedException`, an AWS administrator can grant the scoped permissions in [yeed-api-ecr-publisher.json](../../infrastructure/iam/yeed-api-ecr-publisher.json) to the publishing identity. It does not create repositories or grant IAM administration permissions.
+
+From the repository root in PowerShell:
+
+```powershell
+$Region = "us-west-1"
+$TargetAccountId = "402906460007"
+# Configure this profile with a publishing identity in the destination account.
+$Profile = "yeed-ecr"
+# Sign in through the browser and select account 402906460007.
+aws login --profile $Profile --region $Region
+if ($LASTEXITCODE -ne 0) { throw "AWS sign-in failed." }
+$AccountId = aws sts get-caller-identity --profile $Profile --region $Region --query Account --output text
+if ($LASTEXITCODE -ne 0) { throw "AWS authentication failed." }
+if ($AccountId -ne $TargetAccountId) { throw "The AWS profile is signed in to the wrong account." }
+$Registry = "$TargetAccountId.dkr.ecr.$Region.amazonaws.com"
+
+$EcrPassword = aws ecr get-login-password --profile $Profile --region $Region
+if ($LASTEXITCODE -ne 0) { throw "Could not obtain the ECR login token." }
+try {
+  $EcrPassword | docker login --username AWS --password-stdin $Registry
+  if ($LASTEXITCODE -ne 0) { throw "Docker login failed." }
+} finally {
+  $EcrPassword = $null
+}
+
+docker tag yeed-api:1.0.0 "${Registry}/yeed-api:1.0.0"
+if ($LASTEXITCODE -ne 0) { throw "Could not tag the local image." }
+docker push "${Registry}/yeed-api:1.0.0"
+if ($LASTEXITCODE -ne 0) { throw "Could not publish the image." }
+
+aws ecr describe-images --profile $Profile --region $Region --registry-id $TargetAccountId --repository-name yeed-api --image-ids imageTag=1.0.0 --query 'imageDetails[0].{Tags:imageTags,Digest:imageDigest,PushedAt:imagePushedAt}' --output table
+if ($LASTEXITCODE -ne 0) { throw "Could not verify the published image." }
+```
+
+Docker should report `Login Succeeded`. After pushing, `describe-images` must return the `1.0.0` tag and its digest. The image can also be checked in the AWS console under ECR → Private repositories → `yeed-api` → Images. See AWS's [publishing instructions](https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html) and [required IAM permissions](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push-iam.html).
+
+To also publish the `latest` alias shown in the ECR console's example commands, tag the same local image with `docker tag yeed-api:1.0.0 "${Registry}/yeed-api:latest"` and push it with `docker push "${Registry}/yeed-api:latest"`.
+
 ## AWS Lambda / SAM
 
 The SAM template keeps API Gateway, its CORS settings, throttling and log retention. It uses `nodejs24.x` and the handler `index.handler`.
