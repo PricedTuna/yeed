@@ -1,0 +1,58 @@
+# Control de versiones, editores y archivos del sistema.
+.git
+.github
+.vscode
+.idea
+.dist
+**/.DS_Store
+**/Thumbs.db
+**/Desktop.ini
+
+# Dependencias, compilaciones, pruebas y registros generados localmente.
+**/node_modules
+**/.pnpm-store
+**/dist
+**/dist-ssr
+**/coverage
+**/test-results
+**/playwright-report
+**/blob-report
+**/tests
+**/events
+**/*.test.*
+**/*.spec.*
+**/*.tsbuildinfo
+**/.eslintcache
+**/*.log
+**/logs
+
+# Variables de entorno, credenciales y copias de datos.
+**/.env
+**/.env.*
+**/.npmrc
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/secrets.*
+**/.aws
+**/*.dump
+**/*.backup
+
+# Entornos de Python y artefactos de AWS SAM.
+**/.aws-sam
+**/samconfig.toml
+**/.venv
+**/venv
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+
+# Este contenedor solo utiliza services/api.
+apps
+aws
+docs
+infrastructure
+lambda_function.py

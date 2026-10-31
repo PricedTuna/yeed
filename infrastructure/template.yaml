@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: Yeed API - API Gateway HTTP API and Python Lambda functions.
+Description: Yeed API - API Gateway HTTP API and Express on Node.js Lambda.
 
 Parameters:
   Stage:
@@ -15,9 +15,10 @@ Parameters:
 
 Globals:
   Function:
-    Runtime: python3.13
+    Runtime: nodejs24.x
     Architectures: [x86_64]
-    CodeUri: ../services/api/src
+    # Run `pnpm --filter @yeed/api build` before `sam build`.
+    CodeUri: ../services/api/dist/lambda
     MemorySize: 256
     Timeout: 10
     LoggingConfig:
@@ -25,8 +26,8 @@ Globals:
       LogGroup: !Ref ApiLogGroup
     Environment:
       Variables:
-        POWERTOOLS_SERVICE_NAME: yeed-api
-        POWERTOOLS_LOG_LEVEL: INFO
+        NODE_ENV: production
+        ALLOWED_ORIGINS: !Join [",", !Ref AllowedOrigins]
     Tags:
       project: yeed
       stage: !Ref Stage
@@ -67,7 +68,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Description: GET /health - reports that the API is reachable.
-      Handler: yeed_api.handlers.health.handler
+      Handler: index.handler
       Events:
         GetHealth:
           Type: HttpApi

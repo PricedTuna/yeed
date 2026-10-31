@@ -63,7 +63,7 @@ Yeed is a web application deployed on cloud infrastructure, with separate compon
 | Layer            | Technology                                                    |
 | ---------------- | ------------------------------------------------------------- |
 | Frontend         | React, TypeScript, Vite                                       |
-| API              | Amazon API Gateway (HTTP API) and AWS Lambda with Python 3.13 |
+| API              | Express 5, TypeScript, Node.js 24; API Gateway and AWS Lambda |
 | Data             | PostgreSQL (proposed deployment: Amazon RDS)                  |
 | Infrastructure   | AWS SAM on CloudFormation                                     |
 | Frontend hosting | Amazon S3 and CloudFront                                      |
@@ -91,35 +91,32 @@ Yeed's main goal is to **reduce the time and effort students spend finding and e
 
 ## Project status
 
-In development. The repository contains the frontend base (tooling, HTTP client and a page that checks the connection to the API) and the backend base (`GET /health` on AWS Lambda, runnable locally with AWS SAM). The database, the business features and the cloud deployment do not exist yet.
+In development. The repository contains the frontend base (tooling, HTTP client and a page that checks the connection to the API) and the backend base (`GET /health` on Express, runnable directly with Node.js, in Docker or through AWS SAM). The database, the business features and the cloud deployment do not exist yet.
 
 ## Repository layout
 
 ```text
 apps/web/          React + TypeScript + Vite frontend
-services/api/      Python 3.13 API for AWS Lambda
+services/api/      Express + TypeScript API for Node.js, Docker and AWS Lambda
 infrastructure/    AWS SAM template (API Gateway, Lambda, logs)
 ```
 
 ## Requirements
 
-| Tool           | Version | Used for                               |
-| -------------- | ------- | -------------------------------------- |
-| Git            | 2.40+   | Version control                        |
-| Node.js        | 24 LTS  | Frontend                               |
-| pnpm           | 12      | Frontend dependencies and root scripts |
-| Python         | 3.13    | Backend                                |
-| uv             | 0.13+   | Backend dependencies and tools         |
-| Docker Desktop | Recent  | Running Lambda functions locally       |
-| AWS SAM CLI    | 1.169+  | Building and running the API locally   |
+| Tool           | Version | Used for                              |
+| -------------- | ------- | ------------------------------------- |
+| Git            | 2.40+   | Version control                       |
+| Node.js        | 24 LTS  | Frontend and API                      |
+| pnpm           | 12      | Workspace dependencies and scripts    |
+| Docker Desktop | Recent  | Optional: containers and local Lambda |
+| AWS SAM CLI    | 1.169+  | Optional: local Lambda and deployment |
 
 On Windows:
 
 ```powershell
 winget install --id OpenJS.NodeJS.LTS -e
 npm install -g pnpm@latest
-winget install --id Python.Python.3.13 -e
-winget install --id astral-sh.uv -e
+# Optional, for Docker / SAM:
 winget install --id Docker.DockerDesktop -e
 winget install --id Amazon.SAM-CLI -e
 ```
@@ -131,13 +128,12 @@ git clone https://github.com/PricedTuna/yeed.git
 cd yeed
 Copy-Item apps/web/.env.example apps/web/.env.local
 pnpm install
-uv sync --directory services/api
 ```
 
 Then, in two terminals:
 
 ```powershell
-pnpm dev:api    # API at http://localhost:3000 (needs Docker Desktop running)
+pnpm dev:api    # Express API at http://localhost:3000
 pnpm dev:web    # frontend at http://localhost:5173
 ```
 

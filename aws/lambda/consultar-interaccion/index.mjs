@@ -1,8 +1,4 @@
-
-import {
-  DynamoDBClient,
-  GetItemCommand
-} from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
 const client = new DynamoDBClient({});
 
@@ -16,8 +12,8 @@ export const handler = async (event) => {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: "Faltan las claves de la interacción"
-      })
+        error: "Faltan las claves de la interacción",
+      }),
     };
   }
 
@@ -27,17 +23,17 @@ export const handler = async (event) => {
         TableName: process.env.TABLE_NAME,
         Key: {
           user_id: { S: user_id },
-          interaction_key: { S: interaction_key }
-        }
-      })
+          interaction_key: { S: interaction_key },
+        },
+      }),
     );
 
     if (!response.Item) {
       return {
         statusCode: 404,
         body: JSON.stringify({
-          mensaje: "Interacción no encontrada"
-        })
+          mensaje: "Interacción no encontrada",
+        }),
       };
     }
 
@@ -46,25 +42,24 @@ export const handler = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         user_id: item.user_id?.S,
         interaction_key: item.interaction_key?.S,
         resource_id: item.resource_id?.S,
         interaction_type: item.interaction_type?.S,
-        occurred_at: item.occurred_at?.S
-      })
+        occurred_at: item.occurred_at?.S,
+      }),
     };
-
   } catch (error) {
     console.error(error);
 
     return {
       statusCode: 500,
       body: JSON.stringify({
-        error: "Error al consultar DynamoDB"
-      })
+        error: "Error al consultar DynamoDB",
+      }),
     };
   }
 };

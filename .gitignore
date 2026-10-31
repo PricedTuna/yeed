@@ -13,7 +13,7 @@ secrets.*
 .aws/
 
 # =============================================================
-# Node.js / pnpm / Vite (apps/*)
+# Node.js / pnpm / Vite (apps/* and services/*)
 # =============================================================
 node_modules/
 .pnpm-store/
@@ -38,14 +38,15 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Only pnpm is used: lockfiles from other package managers must not appear.
+# pnpm manages the workspace; the API's npm lockfile is used by Docker.
 package-lock.json
+!services/api/package-lock.json
 yarn.lock
 bun.lock
 bun.lockb
 
 # =============================================================
-# Python (services/api)
+# Python (standalone scripts)
 # =============================================================
 __pycache__/
 *.py[cod]

@@ -4,9 +4,6 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "vitest.explorer",
-    "ms-python.python",
-    "ms-python.mypy-type-checker",
-    "charliermarsh.ruff",
     "amazonwebservices.aws-toolkit-vscode"
   ]
 }

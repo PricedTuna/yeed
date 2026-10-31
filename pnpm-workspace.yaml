@@ -1,8 +1,13 @@
 packages:
   - apps/*
+  - services/*
 
 # Fail the install when the Node.js version does not satisfy "engines".
 engineStrict: true
+
+# esbuild's install script verifies the platform binary used for Lambda bundles.
+allowBuilds:
+  esbuild: true
 
 # pnpm 11 security defaults are kept on purpose (see docs/decisions/0003):
 # - minimumReleaseAge: 1440 -> versions published less than a day ago are not installed.

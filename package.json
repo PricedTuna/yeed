@@ -7,16 +7,18 @@
   },
   "scripts": {
     "dev:web": "pnpm --filter @yeed/web dev",
-    "dev:api": "cd infrastructure && sam build && sam local start-api --port 3000",
+    "dev:api": "pnpm --filter @yeed/api dev",
+    "dev:api:sam": "pnpm --filter @yeed/api build && cd infrastructure && sam build && sam local start-api --port 3000",
+    "start:api": "pnpm --filter @yeed/api start",
     "build": "pnpm --recursive build",
     "typecheck": "pnpm --recursive typecheck",
     "lint": "pnpm --recursive lint",
     "test": "pnpm --recursive test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check:web": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test",
-    "check:api": "uv run --directory services/api ruff format --check . && uv run --directory services/api ruff check . && uv run --directory services/api mypy && uv run --directory services/api pytest",
-    "check": "pnpm check:web && pnpm check:api"
+    "check:web": "pnpm --filter @yeed/web lint && pnpm --filter @yeed/web typecheck && pnpm --filter @yeed/web test",
+    "check:api": "pnpm --filter @yeed/api lint && pnpm --filter @yeed/api typecheck && pnpm --filter @yeed/api test",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {
     "prettier": "^3.9.10"
