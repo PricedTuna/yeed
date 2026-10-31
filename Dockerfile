@@ -1,4 +1,5 @@
 # Elegimos una imagen ligera de Node.js 22 para reducir el tamaño de la API.
+# Ejecuta `docker build` desde la raíz del repositorio, junto a este archivo.
 FROM node:22-alpine AS base
 WORKDIR /app
 

@@ -13,7 +13,7 @@ Copy-Item services/api/.env.example services/api/.env
 pnpm dev:api
 ```
 
-Open <http://localhost:3000/health>. Development uses Node's native TypeScript support and watch mode. Docker, Python and AWS credentials are not required. The frontend's `VITE_API_BASE_URL` remains `http://localhost:3000`.
+Open <http://localhost:3000/health>. Development uses Node's native TypeScript support and watch mode. Docker and AWS credentials are not required. The frontend's `VITE_API_BASE_URL` remains `http://localhost:3000`.
 
 | Variable          | Default                 | Purpose                                                 |
 | ----------------- | ----------------------- | ------------------------------------------------------- |
@@ -41,11 +41,11 @@ Add dependencies with `pnpm --filter @yeed/api add <package>` (or `add -D` for t
 
 ## Docker
 
-Run these commands from the **repository root**, which is the build context:
+The `Dockerfile` and `.dockerignore` live at the **repository root**. Run these commands from that directory:
 
 ```powershell
-docker build -f services/api/Dockerfile --build-arg APP_VERSION=1.0.0 -t yeed-api .
-docker run --rm -p 3000:3000 -e ALLOWED_ORIGINS=http://localhost:5173 yeed-api
+docker build --build-arg APP_VERSION=1.0.0 -t yeed-api:1.0.0 .
+docker run --rm -p 3000:3000 -e ALLOWED_ORIGINS=http://localhost:5173 yeed-api:1.0.0
 ```
 
 The image uses `node:22-alpine` with `dependencies`, `build` and `production` stages. `npm ci` installs the exact versions in `services/api/package-lock.json`; the final stage uses `npm ci --omit=dev`, compiled JavaScript and the unprivileged `node` user. OCI labels record the title, description and `APP_VERSION`. The root `.dockerignore` excludes local dependencies, compiled output, tests, environment files and credentials. Provide credentials at runtime; never add them to the Dockerfile or image.
@@ -54,7 +54,7 @@ pnpm continues to manage local workspace development. After changing API depende
 
 ## AWS Lambda / SAM
 
-The existing SAM template keeps API Gateway, its CORS settings, throttling and log retention. It uses `nodejs24.x` and the handler `index.handler` instead of the Python runtime.
+The SAM template keeps API Gateway, its CORS settings, throttling and log retention. It uses `nodejs24.x` and the handler `index.handler`.
 
 Build the bundled handler before running SAM:
 
@@ -82,7 +82,6 @@ services/api/
 │   └── shared/             HTTP middleware and ApiError
 ├── tests/                  Node test runner; real HTTP requests without AWS
 ├── events/                 Sample API Gateway events
-├── Dockerfile
 └── package.json
 ```
 

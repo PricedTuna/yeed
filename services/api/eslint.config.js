@@ -4,7 +4,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["dist", "coverage", ".venv", "venv", "**/__pycache__"]),
+  globalIgnores(["dist", "coverage"]),
   {
     files: ["**/*.ts"],
     extends: [
